@@ -3,30 +3,44 @@ package cloud.autotests.tests;
 import io.qameta.allure.Description;
 import org.junit.jupiter.api.*;
 
+import static com.codeborne.selenide.Condition.text;
+import static com.codeborne.selenide.Selectors.byLinkText;
+import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.*;
 import static io.qameta.allure.Allure.step;
 import static org.assertj.core.api.Assertions.assertThat;
 
 
 public class AppTests extends TestBase {
+    private static final String username = "tomsmith";
+    private static final String password = "SuperSecretPassword!";
+
     @Test
     @Description("Soon to be implemented by QA.GURU engineers")
     @DisplayName("c05-ElenaBalalaykina-lesson12")
     void generatedTest() {
-        step("Open https://the-internet.herokuapp.com/", () -> {
-            // todo
-        });
 
-        step("Go to 'Form Authentication'", () -> {
-            // todo
-        });
+
+        step("Open https://the-internet.herokuapp.com/", () ->
+                open("https://the-internet.herokuapp.com/")
+        );
+
+        step("Go to 'Form Authentication'", () ->
+                $(byLinkText("Form Authentication")).click()
+        );
 
         step("Check log-in", () -> {
-            // todo
+            $("#username").setValue(username);
+            $("#password").setValue(password);
+            $("[type=submit]").click();
+
+            $(".flash.success").shouldHave(text("You logged into a secure area!"));
         });
 
         step("Check log-out", () -> {
-            // todo
+            $("a.button").$(byText("Logout")).click();
+
+            $(".flash.success").shouldHave(text("You logged out of the secure area!"));
         });
     }
 
@@ -35,7 +49,7 @@ public class AppTests extends TestBase {
     @DisplayName("Page title test")
     void titleTest() {
         step("Open url 'https://the-internet.herokuapp.com/'", () ->
-            open("https://the-internet.herokuapp.com/"));
+                open("https://the-internet.herokuapp.com/"));
 
         step("Checking that the page title has is 'The Internet'", () -> {
             String expectedTitle = "The Internet";
